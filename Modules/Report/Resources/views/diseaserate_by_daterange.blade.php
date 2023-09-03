@@ -188,7 +188,7 @@
                 <!-- Card Body -->
                 <div class="dt-card__body">
 
-                    <form id="form-filter" method="POST" action="{{route('branch-wise-patients')}}" >
+                    <form id="form-filter" method="POST" action="" >
                         @csrf
                         <div class="row">
                             <div class="form-group col-md-3">

@@ -41,6 +41,13 @@ var branchName = branch && branch.length > 0 ? branch[0].HealthCenterName : 'Unk
                 }
             },
         },
+         tooltip: {
+                crosshairs: true,
+                shared: false,
+                style: {
+            fontSize: '12px', // Adjust the font size here
+        },
+            },
           plotOptions: {
             column: {
                 colorByPoint: true,

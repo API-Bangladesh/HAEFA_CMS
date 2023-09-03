@@ -293,11 +293,11 @@
                                 </select>
                             </div>
                             <div class="col-md-2 warning-searching invisible" id="warning-searching">
-                                <span class="text-danger" id="warning-message">Searching...Please Wait</span>
+                                <span class="text-danger" id="warning-message"></span>
                                 <span class="spinner-border text-danger"></span>
                             </div>
 
-                            <div class="form-group col-md-2 pt-24">
+                            <div class="form-group col-md-4 pt-24">
 
                                 <button type="button" id="search" class="btn btn-primary btn-sm float-right mr-2">
                                     <i class="fas fa-search"></i>
@@ -348,7 +348,7 @@
 <script>
  var table;
  $(document).ready(function(){
- var start = moment().subtract(29, 'days');
+    var start = moment().subtract(29, 'days');
     var end = moment();
 
      $('input[name="daterange"]').daterangepicker({

@@ -194,7 +194,7 @@
                             <div class="row">
                                 <div class="form-group col-md-3">
                                     <label for="name">Date Range</label>
-                                    <input type="text" class="form-control" name="daterange" id="daterange" placeholder="Enter Date Range">
+                                    <input type="text" class="form-control" name="daterange" id="daterange" placeholder="Enter Date Range" required>
                                 </div>
                                <div class="form-group col-md-3">
                                     <label for="name">Branch </label>
@@ -216,7 +216,7 @@
                                 </div>
                            
                                 <div class="col-md-2 warning-searching invisible" id="warning-searching">
-                                    <span class="text-danger" id="warning-message">Searching...Please Wait</span>
+                                    <span class="text-danger" id="warning-message"></span>
                                     <span class="spinner-border text-danger"></span>
                                 </div>
                                 <div class="form-group col-md-2 pt-24">
@@ -293,6 +293,7 @@
                     {
                         extend: 'excel',
                         text: 'Export to Excel',
+                        filename: 'Referred Cases Report'
 
                     },
                 ],
@@ -324,15 +325,11 @@
       $('input[name="daterange"]').click(function() {
         $('.daterangepicker').show();
     });
+});
 
-
-
-
-        });
-
-         $('#daterange').on('input', function () {
-                
-            });
+    $('#btn-filter').on('click', function () {
+        $('#warning-searching').removeClass('invisible');
+     });
 
 </script>
 @endpush

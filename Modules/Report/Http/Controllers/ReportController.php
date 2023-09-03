@@ -28,8 +28,9 @@ class ReportController extends BaseController
         return view('report::index');
     }
     public function datewisedxindex(){
+        $healthcenters=BarcodeFormat::with('healthCenter')->get();
         $this->setPageData('Datewise Provisional DX','Datewise Provisional DX','fas fa-th-list');
-        return view('report::datewisedx');
+        return view('report::datewisedx',compact('healthcenters'));
     }
 public function diseaseindex()
     {
@@ -70,8 +71,12 @@ public function diseaseindex()
     
 
     public function SearchByDate(Request $request){
-        $starting_date = $request->starting_date;
-        $ending_date = $request->ending_date;
+        $healthcenters=BarcodeFormat::with('healthCenter')->get();
+        $daterange = $request->daterange;
+        $dates = explode(' - ', $daterange);
+        $starting_date = $dates[0]??'';
+        $ending_date = $dates[1]??'';
+        $hc = $request->hc_id;
 
         $results = DB::table("MDataProvisionalDiagnosis")
             ->select(DB::raw("CAST(CreateDate AS DATE) as CreateDate"), 'ProvisionalDiagnosis', DB::raw('COUNT(*) as Total'))
@@ -80,9 +85,69 @@ public function diseaseindex()
             ->groupBy(DB::raw("CAST(CreateDate AS DATE)"), 'ProvisionalDiagnosis')
             ->get();
 
+        // $results = DB::table("MDataProvisionalDiagnosis")
+        // ->select(DB::raw("CAST(MDataProvisionalDiagnosis.CreateDate AS DATE) as CreateDate"), 'ProvisionalDiagnosis', DB::raw('COUNT(*) as Total'))
+        // ->whereDate('MDataProvisionalDiagnosis.CreateDate', '>=', $starting_date)
+        // ->whereDate('MDataProvisionalDiagnosis.CreateDate', '<=', $ending_date)
+        // ->groupBy(DB::raw("CAST(MDataProvisionalDiagnosis.CreateDate AS DATE)"), 'ProvisionalDiagnosis');
+        // if ($hc) {
+        //     $results->join('Patient', function ($join) use ($hc) {
+        //         $join->on(DB::raw("LEFT(Patient.RegistrationId, 9)"), 'LIKE', DB::raw("CONCAT('" . $hc . "', '%')"));
+        //     })
+        //     ->join('barcode_formats', function ($join) {
+        //         $join->on('barcode_formats.barcode_prefix', '=', DB::raw("LEFT(Patient.RegistrationId, 9)"));
+        //     })
+        //     ->join('HealthCenter', 'HealthCenter.HealthCenterCode', '=', 'barcode_formats.barcode_prefix')
+        //     ->select(DB::raw('MAX(HealthCenter.HealthCenterName) as HealthCenterName'),DB::raw("CAST(MDataProvisionalDiagnosis.CreateDate AS DATE) as CreateDate"),'ProvisionalDiagnosis');
+        // }
+
+// $results = DB::table("MDataProvisionalDiagnosis")
+//     ->select(
+//         DB::raw("CAST(MDataProvisionalDiagnosis.CreateDate AS DATE) as CreateDate"),
+//         'ProvisionalDiagnosis',
+//         DB::raw('COUNT(DISTINCT Patient.PatientId) as Total')
+//     );
+
+// if ($hc) {
+//     $results->join('Patient', function ($join) use ($hc) {
+//         $join->on(DB::raw("LEFT(Patient.RegistrationId, 9)"), 'LIKE', DB::raw("CONCAT('" . $hc . "', '%')"));
+//     })
+//     ->join('barcode_formats', function ($join) {
+//         $join->on('barcode_formats.barcode_prefix', '=', DB::raw("LEFT(Patient.RegistrationId, 9)"));
+//     })
+//     ->join('HealthCenter', 'HealthCenter.HealthCenterCode', '=', 'barcode_formats.barcode_prefix')
+//     ->select(
+//         DB::raw('MAX(HealthCenter.HealthCenterName) as HealthCenterName'),
+//         DB::raw("CAST(MDataProvisionalDiagnosis.CreateDate AS DATE) as CreateDate"),
+//         'ProvisionalDiagnosis',
+//         DB::raw('COUNT(DISTINCT Patient.PatientId) as Total')
+//     )
+//     ->whereDate('MDataProvisionalDiagnosis.CreateDate', '>=', $starting_date)
+//     ->whereDate('MDataProvisionalDiagnosis.CreateDate', '<=', $ending_date)
+//     ->groupBy(DB::raw("CAST(MDataProvisionalDiagnosis.CreateDate AS DATE)"), 'ProvisionalDiagnosis', 'HealthCenter.HealthCenterName');
+// } else {
+//     $results->join('Patient', 'MDataProvisionalDiagnosis.PatientId', '=', 'Patient.PatientId')
+//     ->join('barcode_formats', function ($join) {
+//         $join->on(DB::raw("LEFT(Patient.RegistrationId, 9)"), '=', 'barcode_formats.barcode_prefix');
+//     })
+//     ->join('HealthCenter', 'HealthCenter.HealthCenterCode', '=', 'barcode_formats.barcode_prefix')
+//     ->select(
+//         DB::raw('MAX(HealthCenter.HealthCenterName) as HealthCenterName'),
+//         DB::raw("CAST(MDataProvisionalDiagnosis.CreateDate AS DATE) as CreateDate"),
+//         'ProvisionalDiagnosis',
+//         DB::raw('COUNT(DISTINCT Patient.PatientId) as Total')
+//     )
+//     ->whereDate('MDataProvisionalDiagnosis.CreateDate', '>=', $starting_date)
+//     ->whereDate('MDataProvisionalDiagnosis.CreateDate', '<=', $ending_date)
+//     ->groupBy(DB::raw("CAST(MDataProvisionalDiagnosis.CreateDate AS DATE)"), 'ProvisionalDiagnosis', 'HealthCenter.HealthCenterName');
+// }
+
+
+//     $results = $results->get();
+
 
         $this->setPageData('Datewise Provisional DX','Datewise Provisional DX','fas fa-th-list');
-        return view('report::datewisedx',compact('results'));
+        return view('report::datewisedx',compact('results','healthcenters'));
 
     }
      
@@ -421,9 +486,11 @@ $results = DB::table("MDataPatientReferral")
     }
 
     public function GlucoseGraph(Request $request){
+        $daterange = $request->daterange;
+        $dates = explode(' - ', $daterange);
+        $starting_date = $dates[0]??'';
+        $ending_date = $dates[1]??'';
         $registrationId=Patient::select('RegistrationId')->get();
-        $starting_date = $request->starting_date;
-        $ending_date = $request->ending_date;
         $RegistrationId = $request->reg_id;
 
         $results = DB::select("

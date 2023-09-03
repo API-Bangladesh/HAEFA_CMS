@@ -50,10 +50,13 @@ Highcharts.chart('container_bloodp', {
             }
         }
     },
-    tooltip: {
-        crosshairs: true,
-        shared: false
-    },
+       tooltip: {
+                crosshairs: true,
+                shared: false,
+                style: {
+            fontSize: '12px', // Adjust the font size here
+        },
+            },
 
     plotOptions: {
         spline: {
