@@ -31,7 +31,7 @@ class HomeController extends Controller
             $registrationId=Patient::select('RegistrationId')->get();
 
             // return view('home');
-            return view('home',compact('patient_today_count','prescription_today_count','registrationId'));
+            return view('home',compact('patient_today_count','prescription_today_count','registrationId','doctor_count'));
         }else{
             return $this->unauthorized_access_blocked();
         }

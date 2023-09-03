@@ -21,7 +21,7 @@
           <h2 class="text-white mt-1">All Patient</h2>
         </div>
       </div> --}}
-      <div class="col-xl-3 col-sm-5">
+      <div class="col-xl-4 col-sm-4">
         <div class="dt-card dt-chart dt-card__full-height bg-danger align-items-center pt-5">
         <img src="images/patient.png" alt="Customer" width="30px;">
           <h4 class="text-white mt-3 mb-0" id="expense">{{ $patient_today_count }}</h4>
@@ -35,91 +35,27 @@
           <h2 class="text-white mt-1">Total Prescription</h2>
         </div>
       </div> --}}
-      <div class="col-xl-2 col-sm-4">
+      <div class="col-xl-4 col-sm-4">
         <div class="dt-card dt-chart dt-card__full-height bg-info align-items-center pt-5">
           <img src="images/customer.svg" alt="Customer" width="30px;">
           <h4 class="text-white mt-3 mb-0">{{$prescription_today_count}}</h4>
           <h2 class="text-white mt-1">Today Prescription</h2>
         </div>
       </div>
-      {{-- <div class="col-xl-2 col-sm-4">
+      <div class="col-xl-4 col-sm-4">
         <div class="dt-card dt-chart dt-card__full-height bg-success align-items-center pt-5">
         <img src="images/customer.svg" alt="Customer" width="30px;">
           <h4 class="text-white mt-3 mb-0">{{ $doctor_count }}</h4>
           <h2 class="text-white mt-1">All Doctor</h2>
         </div>
-      </div> --}}
+      </div>
     </div>
     <!-- Start :: Bar Chart-->
         <div class="row py-5">
             <div class="col-md-12">
-            <div class="card bar-chart">
-                <div class="card-header d-flex align-items-center">
-                <h4>Patient wise Blood Pressure Graph </h4>
-                </div>
-            </div>
-
+          
             <!-- Card -->
-            <div class="dt-card">
-                <!-- Card Body -->
-                <div class="dt-card__body">
-
-                    <form id="form-filter" method="GET" action="{{url('patient-blood-pressure-graph')}}">
-
-                        <div class="row">
-                            <div class="form-group col-md-2">
-                                <label for="name">Date From</label>
-                                <input type="date" class="form-control" value="<?php echo $_GET['starting_date']??'' ?>" name="starting_date" id="starting_date"
-                                    placeholder="Date From">
-                            </div>
-                            <div class="form-group col-md-2">
-                                <label for="name">Date To </label>
-                                <input type="date" class="form-control" value="<?php echo $_GET['ending_date']??'' ?>" name="ending_date" id="ending_date"
-                                    placeholder="Date To">
-                            </div>
-
-                            <div class="form-group col-md-3">
-                                <label for="name">Registration Id</label>
-
-                                <select class="selectpicker" data-live-search="true" name="registration_id" id="registration_id">
-                                    <option value="">Select Registration ID</option> <!-- Empty option added -->
-
-                                    @foreach($registrationId as $registration_id)
-                                        <option value="{{$registration_id->RegistrationId}}">{{$registration_id->RegistrationId}}</option>
-
-                                    @endforeach
-
-                                </select>
-                            </div>
-                            <div class="col-md-2 warning-searching invisible" id="warning-searching">
-                                <span class="text-danger" id="warning-message">Searching...Please Wait</span>
-                                <span class="spinner-border text-danger"></span>
-                            </div>
-
-                            <div class="form-group col-md-2 pt-24">
-
-                                <button type="button" id="search" class="btn btn-primary btn-sm float-right mr-2">
-                                    <i class="fas fa-search"></i>
-                                </button>
-
-                                <button type="button" id="refresh" class="btn btn-primary btn-sm float-right mr-2 refresh">
-                                <i class="fas fa-sync-alt"></i></button>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-12">
-                                <figure class="highcharts-figure">
-                                    <div id="container_bloodp"></div>
-                                </figure>
-                            </div>
-                        </div>
-                    </form>
-
-                </div>
-                <!-- /card body -->
-
-                </div>
+        
                 <!-- /card -->
 
 
