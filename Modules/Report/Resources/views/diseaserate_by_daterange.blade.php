@@ -248,10 +248,6 @@
 <script src="js/export-data.js"></script>
 <script src="js/accessibility.js"></script>
 
-<!--<script type="text/javascript" src="{{asset('js/jquery.js')}}"></script>-->
-{{-- <script type="text/javascript" src="{{asset('js/moment.js')}}"></script>
-<script type="text/javascript" src="{{asset('js/daterangepicker.js')}}"></script> --}}
-
 
 
 <script src="js/dataTables.buttons.min.js"></script>
