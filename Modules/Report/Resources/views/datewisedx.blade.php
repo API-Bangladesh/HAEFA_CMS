@@ -5,6 +5,7 @@
 @endsection
 
 @push('stylesheet')
+
     <style>
         {{--        pagination style--}}
 
@@ -191,20 +192,31 @@
                             @csrf
                             <div class="row">
                                 <div class="form-group col-md-3">
-                                    <label for="name">Date From</label>
-                                    <input type="date" class="form-control" name="starting_date" id="starting_date" placeholder="Date From">
+                                    <label for="name">Date Range</label>
+                                    <input type="text" class="form-control" value="" name="daterange" id="daterange"
+                                    placeholder="Select Date" required>
                                 </div>
-                                <div class="form-group col-md-3">
-                                    <label for="name">Date To </label>
-                                    <input type="date" class="form-control" name="ending_date" id="ending_date" placeholder="Date To">
+                                 <div class="form-group col-md-3">
+                                    <label for="name">Select Branch</label>
+
+                                    <select class="selectpicker" data-live-search="true" name="hc_id" id="hc_id">
+                                        <option value="">Select Branch</option> <!-- Empty option added -->
+
+                                        @foreach($healthcenters as $healthcenter)
+                                            <option value="{{$healthcenter->barcode_prefix}}">{{$healthcenter->healthCenter->HealthCenterName}}</option>
+
+                                        @endforeach
+
+                                    </select>
                                 </div>
+                               
                                 <div class="col-md-2 warning-searching invisible" id="warning-searching">
-                                    <span class="text-danger" id="warning-message">Searching...Please Wait</span>
+                                    <span class="text-danger" id="warning-message"></span>
                                     <span class="spinner-border text-danger"></span>
                                 </div>
-                                <div class="form-group col-md-4 pt-24">
+                                <div class="form-group col-md-7 pt-24">
 
-                                    <button type="submit"  class="btn btn-primary d-none btn-sm float-right mr-2" id="btn-filter"
+                                    <button type="submit"  class="btn btn-primary btn-sm float-right mr-2" id="btn-filter"
                                             data-toggle="tooltip" data-placement="top" data-original-title="Filter Data">
                                         <i class="fas fa-search"></i>
                                     </button>
@@ -220,6 +232,7 @@
                                 <th>No</th>
                                 <th>Date</th>
                                 <th>Provisional DX</th>
+                                <th>Branch</th>
                                 <th>Total</th>
 
                             </tr>
@@ -231,9 +244,10 @@
                                     <tr>
 
                                         <td>{{$loop->iteration}}</td>
-                                        <td>{{$result->CreateDate}}</td>
-                                        <td>{{$result->ProvisionalDiagnosis}}</td>
-                                        <td>{{$result->Total}}</td>
+                                        <td>{{$result->CreateDate ?? ''}}</td>
+                                        <td>{{$result->ProvisionalDiagnosis ?? ''}}</td>
+                                        <td>{{$result->HealthCenterName ?? ''}}</td>
+                                        <td>{{$result->Total ?? ''}}</td>
 
                                     </tr>
                                 @endforeach
@@ -261,11 +275,40 @@
 @push('script')
     <script src="js/dataTables.buttons.min.js"></script>
     <script src="js/buttons.html5.min.js"></script>
+   
     <script>
         var table;
 
 
         $(document).ready(function () {
+
+             var start = moment().subtract(29, 'days');
+    var end = moment();
+
+     $('input[name="daterange"]').daterangepicker({
+        startDate: start,
+        endDate: end,
+        showDropdowns: true,
+        linkedCalendars: false,
+        ranges: {
+        'Today': [moment(), moment()],
+        'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+        'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+        'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+        'This Month': [moment().startOf('month'), moment().endOf('month')],
+        'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+        'This Quarter': [moment().startOf('quarter'), moment().endOf('quarter')],
+        'This Year': [moment().startOf('year'), moment().endOf('year')]
+        }
+    });
+
+     $('.daterangepicker').mouseleave(function() {
+        $(this).hide();
+    });
+      $('input[name="daterange"]').click(function() {
+        $('.daterangepicker').show();
+    });
+
             $('#dataTable').DataTable({
                 pagingType: 'full_numbers',
                 dom: 'Bfrtip',
@@ -274,6 +317,7 @@
                     {
                         extend: 'excel',
                         text: 'Export to Excel',
+                        filename: 'Provisional Diagnosis Report'
 
                     },
                 ],
@@ -302,16 +346,16 @@
             $('#warning-searching').removeClass('invisible');
         });
 
-        $(function () {
+        // $(function () {
 
-            $('#starting_date, #ending_date').on('input', function () {
-                if ($('#starting_date').val() != '' && $('#ending_date').val() != '') {
-                    $('#btn-filter').removeClass('d-none');
-                } else {
-                    $('#btn-filter').addClass('d-none');
-                }
-            });
-        });
+        //     $('#daterange').on('input', function () {
+        //         if ($('#daterange').val() != '') {
+        //             $('#btn-filter').removeClass('d-none');
+        //         } else {
+        //             $('#btn-filter').addClass('d-none');
+        //         }
+        //     });
+        // });
 
     </script>
 @endpush

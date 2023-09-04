@@ -303,7 +303,7 @@ $results = DB::table("MDataPatientReferral")
             ->whereRaw('CONVERT(float, Age) <= ?', [$ending_age])
             ->join('MDataProvisionalDiagnosis', 'Patient.PatientId', '=', 'MDataProvisionalDiagnosis.PatientId')
             ->join('RefGender', 'Patient.GenderId', '=', 'RefGender.GenderId')
-            ->get(['ProvisionalDiagnosis', 'OtherProvisionalDiagnosis', 'GivenName', 'FamilyName', 'Age', 'GenderCode']);
+            ->get(['ProvisionalDiagnosis', 'OtherProvisionalDiagnosis', 'GivenName', 'FamilyName','DiagnosisStatus', 'Age', 'GenderCode']);
         foreach ($results as $result){
             if ($result->Age < 6 && $result->GenderCode == 'Male'){
                 $maleBelowFive++;

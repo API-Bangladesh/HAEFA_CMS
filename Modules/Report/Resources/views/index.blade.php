@@ -211,6 +211,7 @@
                             </div>
                         </div>
                     </form>
+            
 
                     <div class="row mb-3">
                         <div class="col-md-3">
@@ -242,6 +243,9 @@
 
 
                     </div>
+               
+
+
                     <table id="dataTable" class="table table-striped table-bordered table-hover">
                         <thead class="bg-primary">
                             <tr>
@@ -250,6 +254,7 @@
                                 <th>Age</th>
                                 <th>Gender</th>
                                 <th>Provisional Dx</th>
+                                <th>Diagnosis Status</th>
                                 <th>Other Provisional Dx</th>
                             </tr>
 
@@ -263,11 +268,24 @@
                                 <td>{{$result->Age}}</td>
                                 <td>{{$result->GenderCode}}</td>
                                 <td>{{$result->ProvisionalDiagnosis}}</td>
+                                <td>{{ $result->DiagnosisStatus == 'Y' ? 'Confirmed' : ($result->DiagnosisStatus == 'N' ? 'Negative' : 'Presumptive') }}</td>
                                 <td>{{$result->OtherProvisionalDiagnosis}}</td>
                             </tr>
                         @endforeach
+                          
                         </tbody>
                         @endif
+                        <tfoot style="display:none">
+                            <tr>
+                                <td>Total: {{$Total ?? ''}}</td>
+                                <td>Male: {{$male ?? ''}}</td>
+                                <td>Female: {{$female ?? ''}}</td>
+                                <td>MaleBelowFive: {{$maleBelowFive ?? ''}}</td>
+                                <td>MaleAboveFive: {{$maleAboveFive ?? ''}}</td>
+                                <td>FemaleBelowFive: {{$femaleBelowFive ?? ''}}</td>
+                                <td>FemaleAboveFive: {{$femaleAboveFive ?? ''}}</td>
+                            </tr>
+                        </tfoot>
                     </table>
 
 
@@ -289,9 +307,12 @@
 
 @push('script')
 <script src="js/dataTables.buttons.min.js"></script>
-    <script src="js/buttons.html5.min.js"></script>
+<script src="js/buttons.html5.min.js"></script>
+
+
+
 <script>
-var table;
+// var table;
 
 
 $(document).ready(function () {
@@ -303,26 +324,11 @@ $(document).ready(function () {
             {
                 extend: 'excel',
                 text: 'Export to Excel',
+                footer: true,
 
             },
         ],
-        // initComplete: function () {
-        //     var api = this.api();
-        //     $('.filterhead', api.table().header()).each(function (i) {
-        //         var column = api.column(i);
-        //         var select = $('<select><option value=""></option></select>')
-        //             .appendTo($(this).empty())
-        //             .on('change', function () {
-        //                 var val = $.fn.dataTable.util.escapeRegex($(this).val());
-        //                 column.search(val ? '^' + val + '$' : '', true, false).draw();
-        //             });
-        //
-        //         column.data().unique().sort().each(function (d, j) {
-        //             select.append('<option value="' + d + '">' + d + '</option>');
-        //         });
-        //     });
-        // },
-    });
+       });
 
 
 
